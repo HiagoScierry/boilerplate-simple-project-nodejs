@@ -2,9 +2,10 @@ name: Build and Publish Docker Image
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*.*.*'
-  workflow_dispatch:
 
 jobs:
   build-and-test:
@@ -14,7 +15,9 @@ jobs:
       run_test: true
       run_build: true
 
+
   publish-docker:
+    needs: build-and-test
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     uses: HiagoScierry/simple-workflow-nodejs-boilerplate/.github/workflows/docker-publish.yml@main
     with:
