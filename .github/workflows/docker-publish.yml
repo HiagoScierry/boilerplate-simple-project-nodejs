@@ -21,18 +21,13 @@ jobs:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     uses: HiagoScierry/simple-workflow-nodejs-boilerplate/.github/workflows/docker-publish.yml@main
     with:
-      dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
-      dockerhub-password: ${{ secrets.DOCKERHUB_PASSWORD }}
       image-name: >-
         ${{ 
           github.event_name == 'workflow_dispatch' 
-            && format('{0}:latest', github.repository) 
-            || format('{0}:{1}', github.repository, github.ref_name) 
+        && format('{0}:latest', github.repository) 
+        || format('{0}:{1}', github.repository, github.ref_name) 
         }}
       build-context: .
-      github-tag: >-
-        ${{ 
-          github.event_name == 'workflow_dispatch' 
-            && 'manual-latest' 
-            || github.ref_name 
-        }}
+    secrets:
+      dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerhub-password: ${{ secrets.DOCKERHUB_PASSWORD }}
