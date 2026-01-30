@@ -89,7 +89,7 @@ A pipeline é disparada automaticamente a cada push na branch `main` (ou outras 
   - Realiza login no Docker Hub (ou outro registry) usando as secrets configuradas no repositório.
   - As secrets necessárias são:
     - `DOCKERHUB_USERNAME`: usuário do Docker Hub
-    - `DOCKERHUB_TOKEN`: token de acesso do Docker Hub (nunca use senha diretamente)
+    - `DOCKERHUB_PASSWORD`: token de acesso do Docker Hub (nunca use senha diretamente)
 
 8. **Push da imagem Docker**
   - Publica a imagem Docker construída para o registry configurado.
