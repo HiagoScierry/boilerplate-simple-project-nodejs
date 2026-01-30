@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*.*.*'
+  workflow_dispatch:
 
 jobs:
   build-and-test:
@@ -14,10 +15,21 @@ jobs:
       run_build: true
 
   publish-docker:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     uses: HiagoScierry/simple-workflow-nodejs-boilerplate/.github/workflows/docker-publish.yml@main
     with:
       dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
       dockerhub-password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      image-name: ${{ github.repository }}:${{ github.ref_name }}
+      image-name: >-
+        ${{ 
+          github.event_name == 'workflow_dispatch' 
+            && format('{0}:latest', github.repository) 
+            || format('{0}:{1}', github.repository, github.ref_name) 
+        }}
       build-context: .
-
+      github-tag: >-
+        ${{ 
+          github.event_name == 'workflow_dispatch' 
+            && 'manual-latest' 
+            || github.ref_name 
+        }}
